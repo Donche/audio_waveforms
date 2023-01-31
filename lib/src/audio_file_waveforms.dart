@@ -62,6 +62,8 @@ class AudioFileWaveforms extends StatefulWidget {
   /// Allow seeking with gestures when turned on.
   final bool enableSeekGesture;
 
+  final Function(double)? onScrollUpdate;
+
   /// Generate waveforms from audio file. You play those audio file using
   /// [PlayerController].
   ///
@@ -87,6 +89,7 @@ class AudioFileWaveforms extends StatefulWidget {
     this.clipBehavior = Clip.none,
     this.waveformType = WaveformType.long,
     this.enableSeekGesture = true,
+    this.onScrollUpdate = null,
   }) : super(key: key);
 
   @override
@@ -341,6 +344,7 @@ class _AudioFileWaveformsState extends State<AudioFileWaveforms>
           (_waveformData.length * widget.playerWaveStyle.spacing);
     }
     if (mounted) setState(() {});
+    widget.onScrollUpdate?.call(_proportion);
   }
 
   ///This will help-out to determine direction of the scroll
