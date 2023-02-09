@@ -89,7 +89,7 @@ class AudioFileWaveforms extends StatefulWidget {
     this.clipBehavior = Clip.none,
     this.waveformType = WaveformType.long,
     this.enableSeekGesture = true,
-    this.onScrollUpdate = null,
+    this.onScrollUpdate,
   }) : super(key: key);
 
   @override
@@ -104,6 +104,7 @@ class _AudioFileWaveformsState extends State<AudioFileWaveforms>
   double _growAnimationProgress = 0.0;
   final ValueNotifier<int> _seekProgress = ValueNotifier(0);
   bool showSeekLine = false;
+  late double maxWaveLenth;
 
   late EdgeInsets? margin;
   late EdgeInsets? padding;
@@ -271,6 +272,10 @@ class _AudioFileWaveformsState extends State<AudioFileWaveforms>
     _waveformData
       ..clear()
       ..addAll(data);
+
+    maxWaveLenth = (widget.playerWaveStyle.waveThickness +
+            widget.playerWaveStyle.spacing * 0.5) *
+        _waveformData.length;
     if (mounted) setState(() {});
   }
 
@@ -295,8 +300,8 @@ class _AudioFileWaveformsState extends State<AudioFileWaveforms>
 
   /// This method handles tap seek gesture
   void _handleScrubberSeekStart(TapUpDetails details) {
-    _proportion = details.localPosition.dx / widget.size.width;
-    var seekPosition = widget.playerController.maxDuration * _proportion;
+    double proportion = details.localPosition.dx / maxWaveLenth;
+    var seekPosition = widget.playerController.maxDuration * proportion;
 
     widget.playerController.seekTo(seekPosition.toInt());
   }
