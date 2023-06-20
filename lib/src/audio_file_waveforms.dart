@@ -304,6 +304,9 @@ class _AudioFileWaveformsState extends State<AudioFileWaveforms>
     var seekPosition = widget.playerController.maxDuration * proportion;
 
     widget.playerController.seekTo(seekPosition.toInt());
+    setState(() {
+      _audioProgress = seekPosition / widget.playerController.maxDuration;
+    });
   }
 
   ///This method handles horizontal scrolling of the wave
